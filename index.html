@@ -81,7 +81,7 @@ li.incorrect{background:#ffeaea;border-color:#ff6a6a}
 <div id="idezet">„Tollal kell írni?” „Nem, zsírkrétával.”</div>
 <div id=lapalja></div>
 <script>
-// -------------------------------------------------------- CSALNI NEM ÉR!!! -----------------------------------------------------
+// -- CSALNI NEM ÉR!!! -------------------------------------------------------- CSALNI NEM ÉR!!! -----------------------------------------------------
 // 1. Rész
 const categoriesa = {
 	ÉVSZÁMOK: {
@@ -93,7 +93,7 @@ const categoriesa = {
 			{ id: 2, left: "1532", right: "A. Kőszeg ostroma" },
 			{ id: 3, left: "1541", right: "Buda elfoglalása → három részre szakadt ország" },
 			{ id: 4, left: "1552", right: "A. Eger ostroma" },
-			{ id: 5, left: "1566", right: "Szigetvár ostroma, meghal Sulejmán szultán" },
+			{ id: 5, left: "1566", right: "Szigetvár ostroma, meghal Szulejmán szultán" },
 			{ id: 6, left: "1592 - 1606", right: "A. 15 éves háború" },
 			{ id: 7, left: "1604 - 1606", right: "Bocskai szabadságharc" },
 			{ id: 8, left: "1606", right: "A. Bécsi béke" },
@@ -107,11 +107,8 @@ const categoriesa = {
 			{ id: 16, left: "1707", right: "A. Óndi országgyűlés: Habsburg trónfosztás" },
 			{ id: 17, left: "1711 - 1740", right: "III. Károly: Pragmatica Sancio" },
 			{ id: 18, left: "1740  - 1780", right: "A. Mária Terézia" },
-			{ id: 19, left: "1777", right: "Oktatási törvény („amiért a Csapi <i>itt</i> ül”)" },
-			{ id: 110, left: "1783", right: "A. Versailles-i béke" },
-			{ id: 111, left: "1783", right: "Versailles-i béke" },
-			{ id: 112, left: "1783", right: "A. Versailles-i béke" },
-			{ id: 113, left: "1783", right: "Versailles-i béke" }
+			{ id: 19, left: "1777", right: "Oktatási törvény („amiért a Csapi itt ül”)" },
+			{ id: 110, left: "1780 - 1790", right: "A. II. József" }
 		]
 	},
 	SZEMÉLYEK: {
@@ -119,14 +116,16 @@ const categoriesa = {
 		leftLabel: "Személy",
 		rightLabel: "Jellemző",
 		pairs: [
-			{ id: 21, left: "Kolumbusz Kristóf", right: "Felfedezte Amerikát" },
-			{ id: 22, left: "Magellán Ferdinánd", right: "Körbehajózta a Földet" },
-			{ id: 23, left: "Luther Márton", right: "95 pont – az evangélikus egyház alapítója" },
-			{ id: 24, left: "Kálvin János", right: "A református egyház alapítója" },
-			{ id: 25, left: "Cromwell Olivér", right: "Az angol polgári forradalom vezetője" },
-			{ id: 26, left: "George Washington", right: "Az USA első elnöke" },
-			{ id: 27, left: "XIV. Lajos (Napkirály)", right: "Korlátlan királyi hatalom" },
-			{ id: 28, left: "Nagy Péter", right: "Reformokat vezetett be Oroszországban" }
+			{ id: 21, left: "Szapolyai János", right: "Erdélyi főúr" },
+			{ id: 22, left: "I. Ferdinánd", right: "Magyarország királya" },
+			{ id: 23, left: "II. János Zsigmond", right: "Szapolyai János fia" },
+			{ id: 24, left: "Jurisics Miklós", right: "Köszeg várának a kapitánya" },
+			{ id: 25, left: "Dobó istván", right: "Eger várának a kapitánya" },
+			{ id: 26, left: "Zrínyi Miklós", right: "Szigetvár várának a kapitánya" },
+			{ id: 27, left: "Bocskai István", right: "Főúr, a Bocskai szabadságharc vezetője" },
+			{ id: 28, left: "Bethlem Gábor", right: "Erdély aranykori vezetője" },
+			{ id: 29, left: "Zrínyi Miklós", right: "Költő és hadvezér, a téli hadjárat vezetője" },
+			{ id: 210, left: "Thököly Imre", right: "Kuruc hadvezér, a török párti Felvidéki fejedelemség megalapítója (→ négy részre szakadt ország)" }
 		]
 	},
 	fogalmak: {
@@ -148,59 +147,66 @@ const categoriesa = {
 };
 // 2. Rész
 const categoriesb = {
-	ÉVSZÁMOK:{color:"#fff7e6",pairs:[
-		{id:211,left:"1492",right:"Amerika felfedezése"},
-		{id:212,left:"1492",right:"Arabok kiűzése Spanyolországból"},
-		{id:213,left:"1517",right:"Luther 95 pontja – a reformáció kezdete"},
-		{id:214,left:"1588",right:"A Nagy Armada pusztulása"},
-		{id:215,left:"1640",right:"Az angol polgárháború kezdete"},
-		{id:216,left:"1648",right:"A harmincéves háború vége"},
-		{id:217,left:"1649",right:"Angol köztársaság kikiáltása"},
-		{id:218,left:"1660",right:"Az angol királyság visszaállítása"},
-		{id:219,left:"1775",right:"Bostoni teadélután"},
-		{id:2110,left:"1776",right:"Amerikai Függetlenségi Nyilatkozat"},
-		{id:2111,left:"1783",right:"Versailles-i béke"}
-	]},
-	SZEMÉLYEK:{color:"#e9f8ff",pairs:[
-		{id:221,left:"Kolumbusz Kristóf",right:"Felfedezte Amerikát."},
-		{id:222,left:"Magellán Ferdinánd",right:"Körbehajózta a Földet."},
-		{id:223,left:"Luther Márton",right:"Az evangélikus egyház alapítója."},
-		{id:224,left:"Kálvin János",right:"A református egyház alapítója."},
-		{id:225,left:"Cromwell Olivér",right:"Az angol polgári forradalom vezetője."},
-		{id:226,left:"George Washington",right:"Az USA első elnöke."},
-		{id:227,left:"XIV. Lajos",right:"Korlátlan királyi hatalma volt."},
-		{id:228,left:"Péter Nagy",right:"Reformokat vezetett be Oroszországban."}
-	]},
-	fogalmak:{color:"#f3f0ff",pairs:[
-		{id:231,left:"Gyarmat",right:"Meghódított, alávetett, kizsákmányolt terület:"},
-		{id:232,left:"Konkvisztádor",right:"Gyarmathódító:"},
-		{id:233,left:"Reformáció",right:"Vallási megújulás:"},
-		{id:234,left:"Manufaktúra",right:"Vállalkozás, ahol a befektető bérmunkásokat fogad a haszon reményében:"},
-		{id:235,left:"Felvilágosodás",right:"Új gondolkodásmód:"},
-		{id:236,left:"Barokk",right:"Új, impozáns művészeti irányzat (a XVI. sz. végétől):"},
-		{id:237,left:"Törvényhozói",right:"... hatalom: országgyűlés"},
-		{id:238,left:"Végrehajtói",right:"... hatalom: kormány"},
-		{id:239,left:"Bírói",right:"... hatalom: bíróság"},
-		{id:2310,left:"Országgyűlés",right:"Törvényhozói hatalom:"},
-		{id:2311,left:"kormány:",right:"Végrehajtói hatalom:"},
-		{id:2312,left:"bíróság:",right:"Bírói hatalom:"},
-		/*
-		
-	pasa: egy török tartomány élén álló vezető tisztségviselő (pl. budai pasa)
-	szpáhi: török földbirtokos, lovaskatona a török seregben
-	janicsár: török gyalogoskatona
-	haradzs: a hódoltsági területen szedett fejadó
-	hajdú: fegyveres marhapásztor, közülük kerültek ki Bocskai katonái
-	Erdély aranykora: Bethlen Gábor fejedelem időszaka, Erdély virágkora
-	labanc: Habsburg(azaz osztrák)-párti magyar
-	kuruc: Habsburg/osztrák ellenes fegyveres felkelő
-	vezérlő fejedelem: az 1707-es ónodi országgyűlésen a Habsburgok trónfosztása után II. Rákóczi Ferenc államfői címe
-	Pragmatica Sanctio: A Habsburgok nőági örökösödését lehetővé tevő törvény
-	úrbér: a jobbágyok terhei (azaz adói)
-	"kalapos király": II. József nem koronáztatta meg magát, ő a korona nélküli ("kalapos") király
-		
-		*/
-	]}
+	ÉVSZÁMOK: {
+		color: "#fff7e6",
+		leftLabel: "Évszám",
+		rightLabel: "Esemény",
+		pairs: [
+			{ id: 21, left: "1426", right: "Mohácsi csata" },
+			{ id: 22, left: "1532", right: "A. Kőszeg ostroma" },
+			{ id: 23, left: "1541", right: "Buda elfoglalása → három részre szakadt ország" },
+			{ id: 24, left: "1552", right: "A. Eger ostroma" },
+			{ id: 25, left: "1566", right: "Szigetvár ostroma, meghal Szulejmán szultán" },
+			{ id: 26, left: "1592 - 1606", right: "A. 15 éves háború" },
+			{ id: 27, left: "1604 - 1606", right: "Bocskai szabadságharc" },
+			{ id: 28, left: "1606", right: "A. Bécsi béke" },
+			{ id: 29, left: "1664", right: "Zrínyi miklós felégette az eszéki hidat a téli hadjárat során" },
+			{ id: 210, left: "A. 1664", right: "A. Vasvári béke" },
+			{ id: 211, left: "1683", right: "Bécs ostroma" },
+			{ id: 212, left: "1686", right: "A. Buda visszafoglalása" },
+			{ id: 213, left: "1697", right: "Zentánál döntö győzelem a törökök ellen" },
+			{ id: 214, left: "1699", right: "A. Karlócai béke" },
+			{ id: 215, left: "0703 - 1711", right: "Rákóczi szabadságharc" },
+			{ id: 216, left: "1707", right: "A. Óndi országgyűlés: Habsburg trónfosztás" },
+			{ id: 217, left: "1711 - 1740", right: "III. Károly: Pragmatica Sancio" },
+			{ id: 218, left: "1740  - 1780", right: "A. Mária Terézia" },
+			{ id: 219, left: "1777", right: "Oktatási törvény („amiért a Csapi itt ül”)" },
+			{ id: 2110, left: "1780 - 1790", right: "A. II. József" }
+		]
+	},
+	SZEMÉLYEK: {
+		color: "#e9f8ff",
+		leftLabel: "Személy",
+		rightLabel: "Jellemző",
+		pairs: [
+			{ id: 221, left: "Szapolyai János", right: "Erdélyi főúr" },
+			{ id: 222, left: "I. Ferdinánd", right: "Magyarország királya" },
+			{ id: 223, left: "II. János Zsigmond", right: "Szapolyai János fia" },
+			{ id: 224, left: "Jurisics Miklós", right: "Köszeg várának a kapitánya" },
+			{ id: 225, left: "Dobó istván", right: "Eger várának a kapitánya" },
+			{ id: 226, left: "Zrínyi Miklós", right: "Szigetvár várának a kapitánya" },
+			{ id: 227, left: "Bocskai István", right: "Főúr, a Bocskai szabadságharc vezetője" },
+			{ id: 228, left: "Bethlem Gábor", right: "Erdély aranykori vezetője" },
+			{ id: 229, left: "Zrínyi Miklós", right: "Költő és hadvezér, a téli hadjárat vezetője" },
+			{ id: 2210, left: "Thököly Imre", right: "Kuruc hadvezér, a török párti Felvidéki fejedelemség megalapítója (→ négy részre szakadt ország)" }
+		]
+	},
+	fogalmak: {
+		color: "#f3f0ff",
+		leftLabel: "Fogalom",
+		rightLabel: "Meghatározás",
+		pairs: [
+			{ id: 241, left: "Gyarmat", right: "Meghódított, alávetett, kizsákmányolt terület" },
+			{ id: 242, left: "Konkvisztádor", right: "Gyarmathódító" },
+			{ id: 243, left: "Reformáció", right: "Vallási megújulás" },
+			{ id: 244, left: "Manufaktúra", right: "Vállalkozás, ahol bérmunkásokat fogadnak haszon reményében" },
+			{ id: 245, left: "Felvilágosodás", right: "Új gondolkodásmód" },
+			{ id: 246, left: "Barokk", right: "Új, impozáns művészeti irányzat (XVI. sz. végétől)" },
+			{ id: 247, left: "Hatalmi ág – törvényhozói", right: "Országgyűlés" },
+			{ id: 248, left: "Hatalmi ág – végrehajtói", right: "Kormány" },
+			{ id: 249, left: "Hatalmi ág – bírói", right: "Bíróság" }
+		]
+	}
 };
 let currentCat=null, phase=1;
 let leftSelected=null,rightSelected=null;
