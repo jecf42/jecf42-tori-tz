@@ -77,10 +77,11 @@ li.incorrect{background:#ffeaea;border-color:#ff6a6a}
 		<div id="summary" class="hidden"></div>
 	</div>
 </div>
-<div id="link"><a href="https://jecf42.github.io/jecf42-tori-tz/attnezes/" target="_blank">Összefoglalás</a></div>
+<div id="link"><a href="https://jecf42.github.io/jecf42-tori-tz/attnezes/" target="_blank">Összefoglalás</a> (tk. 33-34, 80-118)</div>
 <div id="idezet">„Tollal kell írni?” „Nem, zsírkrétával.”</div>
 <div id=lapalja></div>
 <script>
+// -------------------------------------------------------- CSALNI NEM ÉR!!! -----------------------------------------------------
 // 1. Rész
 const categoriesa = {
 	ÉVSZÁMOK: {
@@ -88,17 +89,29 @@ const categoriesa = {
 		leftLabel: "Évszám",
 		rightLabel: "Esemény",
 		pairs: [
-			{ id: 1, left: "1492", right: "A. Amerika felfedezése" },
-			{ id: 2, left: "A. 1492", right: "Arabok kiűzése Spanyolországból" },
-			{ id: 3, left: "1517", right: "A. Luther Márton 95 pontja – reformáció kezdete" },
-			{ id: 4, left: "1588", right: "A. A Nagy Armada pusztulása" },
-			{ id: 5, left: "1640", right: "Az angol polgárháború kezdete" },
-			{ id: 6, left: "1648", right: "A. A harmincéves háború vége" },
-			{ id: 7, left: "1649", right: "A. Angol köztársaság kikiáltása" },
-			{ id: 8, left: "1660", right: "Az angol királyság visszaállítása" },
-			{ id: 9, left: "1775", right: "Bostoni teadélután" },
-			{ id: 10, left: "1776", right: "Amerikai Függetlenségi Nyilatkozat" },
-			{ id: 11, left: "1783", right: "Versailles-i béke" }
+			{ id: 1, left: "1426", right: "Mohácsi csata" },
+			{ id: 2, left: "1532", right: "A. Kőszeg ostroma" },
+			{ id: 3, left: "1541", right: "Buda elfoglalása → három részre szakadt ország" },
+			{ id: 4, left: "1552", right: "A. Eger ostroma" },
+			{ id: 5, left: "1566", right: "Szigetvár ostroma, meghal Sulejmán szultán" },
+			{ id: 6, left: "1592 - 1606", right: "A. 15 éves háború" },
+			{ id: 7, left: "1604 - 1606", right: "Bocskai szabadságharc" },
+			{ id: 8, left: "1606", right: "A. Bécsi béke" },
+			{ id: 9, left: "1664", right: "Zrínyi miklós felégette az eszéki hidat a téli hadjárat során" },
+			{ id: 10, left: "A. 1664", right: "A. Vasvári béke" },
+			{ id: 11, left: "1683", right: "Bécs ostroma" },
+			{ id: 12, left: "1686", right: "A. Buda visszafoglalása" },
+			{ id: 13, left: "1697", right: "Zentánál döntö győzelem a törökök ellen" },
+			{ id: 14, left: "1699", right: "A. Karlócai béke" },
+			{ id: 15, left: "0703 - 1711", right: "Rákóczi szabadságharc" },
+			{ id: 16, left: "1707", right: "A. Óndi országgyűlés: Habsburg trónfosztás" },
+			{ id: 17, left: "1711 - 1740", right: "III. Károly: Pragmatica Sancio" },
+			{ id: 18, left: "1740  - 1780", right: "A. Mária Terézia" },
+			{ id: 19, left: "1777", right: "Oktatási törvény („amiért a Csapi <i>itt</i> ül”)" },
+			{ id: 110, left: "1783", right: "A. Versailles-i béke" },
+			{ id: 111, left: "1783", right: "Versailles-i béke" },
+			{ id: 112, left: "1783", right: "A. Versailles-i béke" },
+			{ id: 113, left: "1783", right: "Versailles-i béke" }
 		]
 	},
 	SZEMÉLYEK: {
@@ -171,6 +184,22 @@ const categoriesb = {
 		{id:2310,left:"Országgyűlés",right:"Törvényhozói hatalom:"},
 		{id:2311,left:"kormány:",right:"Végrehajtói hatalom:"},
 		{id:2312,left:"bíróság:",right:"Bírói hatalom:"},
+		/*
+		
+	pasa: egy török tartomány élén álló vezető tisztségviselő (pl. budai pasa)
+	szpáhi: török földbirtokos, lovaskatona a török seregben
+	janicsár: török gyalogoskatona
+	haradzs: a hódoltsági területen szedett fejadó
+	hajdú: fegyveres marhapásztor, közülük kerültek ki Bocskai katonái
+	Erdély aranykora: Bethlen Gábor fejedelem időszaka, Erdély virágkora
+	labanc: Habsburg(azaz osztrák)-párti magyar
+	kuruc: Habsburg/osztrák ellenes fegyveres felkelő
+	vezérlő fejedelem: az 1707-es ónodi országgyűlésen a Habsburgok trónfosztása után II. Rákóczi Ferenc államfői címe
+	Pragmatica Sanctio: A Habsburgok nőági örökösödését lehetővé tevő törvény
+	úrbér: a jobbágyok terhei (azaz adói)
+	"kalapos király": II. József nem koronáztatta meg magát, ő a korona nélküli ("kalapos") király
+		
+		*/
 	]}
 };
 let currentCat=null, phase=1;
