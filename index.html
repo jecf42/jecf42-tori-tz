@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Párosítós játék a töri TZ-re</title>
+<style>
+*,
+*::before,
+*::after{box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f3f6fb;margin:0}
+header{text-align:center;padding:18px 10px;font-size:1.6rem;font-weight:700;color:#333}
+#categoryBar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px 16px 20px}
+#categoryBar button{padding:10px 18px;border-radius:999px;border:none;cursor:pointer;font-size:.95rem;font-weight:600;background:#e7ebf3;transition:.18s}
+#categoryBar button:hover:not(:disabled){background:#d4d9e6}
+#categoryBar button:disabled{opacity:.5;cursor:not-allowed}
+#gameArea{max-width:900px;margin:0 auto 40px;padding:10px 18px 30px;border-radius:18px;box-shadow:0 14px 30px rgba(0,0,0,.06)}
+#link{text-align:center;padding:18px 10px;font-size:1.0rem;font-weight:700;color:#333}
+#idezet{text-align:center;padding:18px 10px;font-size:1.0rem;font-weight:700;color:#333}
+#lapalja{text-align:center;padding:18px 10px;font-size:1.0rem;font-weight:700;color:#333}
+#status{text-align:center;font-weight:700;margin:14px 0 10px;font-size:1.2rem}
+#hud{text-align:center;font-weight:800;margin-bottom:12px;font-size:1.05rem}
+#best{margin-top:4px;font-size:.95rem;text-align:center;font-weight:700}
+.lists{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:14px}
+.column{background:white;border-radius:14px;padding:14px;min-height:260px}
+.column h3{text-align:center;margin:4px 0 10px}
+ul{list-style:none;padding:0;margin:0}
+li{background:#f4f7fd;margin:6px 0;padding:10px 12px;border-radius:10px;cursor:pointer;transition:.15s;border:2px solid transparent}
+li:hover{background:#eef2fb}
+li.selected{border-color:#6c8dff;background:#e9efff}
+li.correct{background:#d8f8df;border-color:#4bb864;cursor:default}
+li.incorrect{background:#ffeaea;border-color:#ff6a6a}
+.completed{text-align:center;padding:14px 10px;margin-top:10px;font-weight:700;color:#2f7b37}
+.hidden{display:none}
+#inputStage{background:white;border-radius:16px;padding:18px;margin-top:18px}
+#question{font-weight:700;margin-bottom:10px}
+#result{font-weight:700;margin-top:8px}
+#summary{font-weight:800;font-size:1.1rem;margin-top:16px;text-align:center}
+</style>
+</head>
+<body>
+<header>Párosítós játék a töri TZ-re</header>
+<div id="categoryBar">
+	<button data-cat="ÉVSZÁMOK">Évszámok</button>
+	<button data-cat="SZEMÉLYEK">Személyek</button>
+	<button data-cat="fogalmak">Fogalmak</button>
+</div>
+<div id="gameArea" class="hidden">
+	<div id="status"></div>
+	<div id="hud">
+		Idő: <span id="time">0</span> mp |
+		Pontszám: <span id="score">0</span>
+		<div id="best">Legjobb — idő: <span id="bestTime">–</span> mp | pont: <span id="bestScore">–</span></div>
+	</div>
+	<div id="matchStage">
+		<div class="lists">
+			<div class="column">
+				<h3>Bal oldal (Először erre kattints!)</h3>
+				<ul id="leftList"></ul>
+			</div>
+			<div class="column">
+				<h3>Jobb oldal</h3>
+				<ul id="rightList"></ul>
+			</div>
+		</div>
+		<div id="completedMsg" class="completed hidden">
+			A párosítás kész — folytatás: Beírós feladat!
+		</div>
+	</div>
+	<div id="inputStage" class="hidden">
+		<div id="question"></div>
+		<input id="answer" type="text"
+			style="width:100%;padding:10px;border-radius:10px;border:2px solid #cfd6f2;font-size:1rem" />
+		<button id="submitAnswer"
+			style="margin-top:10px;padding:10px 18px;border:none;border-radius:12px;background:#6c8dff;color:white;font-weight:700;cursor:pointer">Válasz elküldése</button>
+		<div id="result"></div>
+		<div id="summary" class="hidden"></div>
+	</div>
+</div>
+<div id="link"><a href="https://jecf42.github.io/jecf42-tori-tz/attnezes/" target="_blank">Összefoglalás</a></div>
+<div id="idezet">„Tollal kell írni?” „Nem, zsírkrétával.”</div>
+<div id=lapalja></div>
+<script>
+// 1. Rész
+const categoriesa = {
+	ÉVSZÁMOK: {
+		color: "#fff7e6",
+		leftLabel: "Évszám",
+		rightLabel: "Esemény",
+		pairs: [
+			{ id: 1, left: "1492", right: "A. Amerika felfedezése" },
+			{ id: 2, left: "A. 1492", right: "Arabok kiűzése Spanyolországból" },
+			{ id: 3, left: "1517", right: "A. Luther Márton 95 pontja – reformáció kezdete" },
+			{ id: 4, left: "1588", right: "A. A Nagy Armada pusztulása" },
+			{ id: 5, left: "1640", right: "Az angol polgárháború kezdete" },
+			{ id: 6, left: "1648", right: "A. A harmincéves háború vége" },
+			{ id: 7, left: "1649", right: "A. Angol köztársaság kikiáltása" },
+			{ id: 8, left: "1660", right: "Az angol királyság visszaállítása" },
+			{ id: 9, left: "1775", right: "Bostoni teadélután" },
+			{ id: 10, left: "1776", right: "Amerikai Függetlenségi Nyilatkozat" },
+			{ id: 11, left: "1783", right: "Versailles-i béke" }
+		]
+	},
+	SZEMÉLYEK: {
+		color: "#e9f8ff",
+		leftLabel: "Személy",
+		rightLabel: "Jellemző",
+		pairs: [
+			{ id: 21, left: "Kolumbusz Kristóf", right: "Felfedezte Amerikát" },
+			{ id: 22, left: "Magellán Ferdinánd", right: "Körbehajózta a Földet" },
+			{ id: 23, left: "Luther Márton", right: "95 pont – az evangélikus egyház alapítója" },
+			{ id: 24, left: "Kálvin János", right: "A református egyház alapítója" },
+			{ id: 25, left: "Cromwell Olivér", right: "Az angol polgári forradalom vezetője" },
+			{ id: 26, left: "George Washington", right: "Az USA első elnöke" },
+			{ id: 27, left: "XIV. Lajos (Napkirály)", right: "Korlátlan királyi hatalom" },
+			{ id: 28, left: "Nagy Péter", right: "Reformokat vezetett be Oroszországban" }
+		]
+	},
+	fogalmak: {
+		color: "#f3f0ff",
+		leftLabel: "Fogalom",
+		rightLabel: "Meghatározás",
+		pairs: [
+			{ id: 41, left: "Gyarmat", right: "Meghódított, alávetett, kizsákmányolt terület" },
+			{ id: 42, left: "Konkvisztádor", right: "Gyarmathódító" },
+			{ id: 43, left: "Reformáció", right: "Vallási megújulás" },
+			{ id: 44, left: "Manufaktúra", right: "Vállalkozás, ahol bérmunkásokat fogadnak haszon reményében" },
+			{ id: 45, left: "Felvilágosodás", right: "Új gondolkodásmód" },
+			{ id: 46, left: "Barokk", right: "Új, impozáns művészeti irányzat (XVI. sz. végétől)" },
+			{ id: 47, left: "Hatalmi ág – törvényhozói", right: "Országgyűlés" },
+			{ id: 48, left: "Hatalmi ág – végrehajtói", right: "Kormány" },
+			{ id: 49, left: "Hatalmi ág – bírói", right: "Bíróság" }
+		]
+	}
+};
+// 2. Rész
+const categoriesb = {
+	ÉVSZÁMOK:{color:"#fff7e6",pairs:[
+		{id:211,left:"1492",right:"Amerika felfedezése"},
+		{id:212,left:"1492",right:"Arabok kiűzése Spanyolországból"},
+		{id:213,left:"1517",right:"Luther 95 pontja – a reformáció kezdete"},
+		{id:214,left:"1588",right:"A Nagy Armada pusztulása"},
+		{id:215,left:"1640",right:"Az angol polgárháború kezdete"},
+		{id:216,left:"1648",right:"A harmincéves háború vége"},
+		{id:217,left:"1649",right:"Angol köztársaság kikiáltása"},
+		{id:218,left:"1660",right:"Az angol királyság visszaállítása"},
+		{id:219,left:"1775",right:"Bostoni teadélután"},
+		{id:2110,left:"1776",right:"Amerikai Függetlenségi Nyilatkozat"},
+		{id:2111,left:"1783",right:"Versailles-i béke"}
+	]},
+	SZEMÉLYEK:{color:"#e9f8ff",pairs:[
+		{id:221,left:"Kolumbusz Kristóf",right:"Felfedezte Amerikát."},
+		{id:222,left:"Magellán Ferdinánd",right:"Körbehajózta a Földet."},
+		{id:223,left:"Luther Márton",right:"Az evangélikus egyház alapítója."},
+		{id:224,left:"Kálvin János",right:"A református egyház alapítója."},
+		{id:225,left:"Cromwell Olivér",right:"Az angol polgári forradalom vezetője."},
+		{id:226,left:"George Washington",right:"Az USA első elnöke."},
+		{id:227,left:"XIV. Lajos",right:"Korlátlan királyi hatalma volt."},
+		{id:228,left:"Péter Nagy",right:"Reformokat vezetett be Oroszországban."}
+	]},
+	fogalmak:{color:"#f3f0ff",pairs:[
+		{id:231,left:"Gyarmat",right:"Meghódított, alávetett, kizsákmányolt terület:"},
+		{id:232,left:"Konkvisztádor",right:"Gyarmathódító:"},
+		{id:233,left:"Reformáció",right:"Vallási megújulás:"},
+		{id:234,left:"Manufaktúra",right:"Vállalkozás, ahol a befektető bérmunkásokat fogad a haszon reményében:"},
+		{id:235,left:"Felvilágosodás",right:"Új gondolkodásmód:"},
+		{id:236,left:"Barokk",right:"Új, impozáns művészeti irányzat (a XVI. sz. végétől):"},
+		{id:237,left:"Törvényhozói",right:"... hatalom: országgyűlés"},
+		{id:238,left:"Végrehajtói",right:"... hatalom: kormány"},
+		{id:239,left:"Bírói",right:"... hatalom: bíróság"},
+		{id:2310,left:"Országgyűlés",right:"Törvényhozói hatalom:"},
+		{id:2311,left:"kormány:",right:"Végrehajtói hatalom:"},
+		{id:2312,left:"bíróság:",right:"Bírói hatalom:"},
+	]}
+};
+let currentCat=null, phase=1;
+let leftSelected=null,rightSelected=null;
+let doneIds=new Set();
+let timer=null,seconds=0,score=0;
+let inputIndex=0, inputOrder=[];
+function loadBests(){
+	const bt = localStorage.getItem("bestTime");
+	const bs = localStorage.getItem("bestScore");
+	document.getElementById("bestTime").innerText = bt ?? "–";
+	document.getElementById("bestScore").innerText = bs ?? "–";
+}
+function saveBests(){
+	const bt = Number(localStorage.getItem("bestTime") ?? Infinity);
+	const bs = Number(localStorage.getItem("bestScore") ?? -Infinity);
+	if(seconds < bt) localStorage.setItem("bestTime", seconds);
+	if(score	 > bs) localStorage.setItem("bestScore", score);
+	loadBests();
+}
+function shuffle(a){return a.slice().sort(()=>Math.random()-.5)}
+function clearSelection(){document.querySelectorAll("li").forEach(li=>li.classList.remove("selected","incorrect"));leftSelected=rightSelected=null}
+function checkCompleted(cat){return cat.pairs.every(p=>doneIds.has(p.id))}
+const dist=(a,b)=>{
+	a=a.toLowerCase();b=b.toLowerCase();
+	const dp=[...Array(a.length+1)].map(()=>Array(b.length+1).fill(0));
+	for(let i=0;i<=a.length;i++)dp[i][0]=i;
+	for(let j=0;j<=b.length;j++)dp[0][j]=j;
+	for(let i=1;i<=a.length;i++)
+		for(let j=1;j<=b.length;j++)
+			dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]==b[j-1]?0:1));
+	return dp[a.length][b.length];
+}
+function loadCategory(key){
+	currentCat=key; phase=1; doneIds.clear(); clearSelection();
+	document.getElementById("matchStage").classList.remove("hidden");
+	document.getElementById("inputStage").classList.add("hidden");
+	document.getElementById("completedMsg").classList.add("hidden");
+	clearInterval(timer);
+	seconds=0; score=0;
+	document.getElementById("time").innerText=seconds;
+	document.getElementById("score").innerText=score;
+	timer=setInterval(()=>{seconds++;document.getElementById("time").innerText=seconds;},1000);
+	const cat=categoriesa[key];
+	document.getElementById("gameArea").style.background=cat.color;
+	document.getElementById("gameArea").classList.remove("hidden");
+	document.getElementById("status").innerText=`${key} — 1. RÉSZ: párosítás`;
+	document.querySelectorAll("#categoryBar button").forEach(btn=>btn.disabled=btn.dataset.cat!==key);
+	const left=document.getElementById("leftList"),right=document.getElementById("rightList");
+	left.innerHTML="";right.innerHTML="";
+	const L=shuffle(cat.pairs),R=shuffle(cat.pairs);
+	L.forEach(p=>{const li=document.createElement("li");li.textContent=p.left;li.dataset.id=p.id;li.onclick=()=>selectLeft(li);left.appendChild(li)});
+	R.forEach(p=>{const li=document.createElement("li");li.textContent=p.right;li.dataset.id=p.id;li.onclick=()=>selectRight(li);right.appendChild(li)});
+	loadBests();
+}
+function selectLeft(li){if(li.classList.contains("correct"))return;clearSelection();leftSelected=li;li.classList.add("selected")}
+function selectRight(li){
+	if(li.classList.contains("correct"))return;
+	if(!leftSelected){li.classList.add("selected");rightSelected=li;return}
+	rightSelected=li;rightSelected.classList.add("selected");validatePair()
+}
+function validatePair(){
+	const leftId=+leftSelected.dataset.id, rightId=+rightSelected.dataset.id;
+	if(leftId===rightId){
+		leftSelected.classList.add("correct");rightSelected.classList.add("correct");
+		doneIds.add(leftId);score+=15;document.getElementById("score").innerText=score;
+		clearSelection();
+		if(checkCompleted(categoriesa[currentCat])){
+			document.getElementById("completedMsg").classList.remove("hidden");
+			setTimeout(startInputStage,900);
+		}
+	}else{
+		leftSelected.classList.add("incorrect");rightSelected.classList.add("incorrect");
+		score-=6;if(score<0)score=0;document.getElementById("score").innerText=score;
+		setTimeout(clearSelection,900);
+	}
+}
+function startInputStage(){
+	phase=2;
+	document.getElementById("matchStage").classList.add("hidden");
+	document.getElementById("inputStage").classList.remove("hidden");
+	document.getElementById("status").innerText=`${currentCat} — 2. RÉSZ: beírós`;
+	inputOrder = shuffle(categoriesb[currentCat].pairs);
+	inputIndex = 0;
+	document.getElementById("result").innerText="";
+	document.getElementById("summary").classList.add("hidden");
+	showQuestion();
+}
+function showQuestion(){
+	if(inputIndex>=inputOrder.length){finishGame();return;}
+	const q=inputOrder[inputIndex];
+	const qDiv=document.getElementById("question");
+	const answer=document.getElementById("answer");
+	let prompt="";
+	if(currentCat==="ÉVSZÁMOK") prompt=` ${q.right}<br><span style="color:#6c6c8a">Írd be az évszámot!</span>`;
+	else if(currentCat==="SZEMÉLYEK") prompt=` ${q.right}<br><span style="color:#6c6c8a">Ki volt ő?</span>`;
+	else prompt=` ${q.right}<br><span style="color:#fff">„István bácsi, lehet puskázni?” „Igen, egyesért.”</span>`;
+	qDiv.innerHTML=prompt;
+	answer.value="";
+	answer.focus();
+}
+document.getElementById("submitAnswer").onclick=()=>{
+	const user=document.getElementById("answer").value.trim();
+	const q=inputOrder[inputIndex];
+	let msg="",correct=false;
+	if(currentCat==="ÉVSZÁMOK"){
+		const diffDigits=(a,b)=>{
+			if(a.length!==b.length) return 4;
+			let d=0;for(let i=0;i<a.length;i++)if(a[i]!==b[i])d++;return d;
+		};
+		if(user===q.left){score+=15;correct=true}
+		else if(diffDigits(user,q.left)===1){score-=2}
+		else score-=4;
+		msg=correct?"✔ Helyes!":"✖ Nem sikerült.";
+	}
+	else if(currentCat==="SZEMÉLYEK"){
+		const full=q.left.toLowerCase();
+		const first=full.split(" ")[0];
+		if(user.toLowerCase()===full){score+=15;correct=true}
+		else if(user.toLowerCase()===first){score+=10;correct=true}
+		else score-=6;
+		msg=correct?"✔ Helyes!":"✖ Nem sikerült.";
+	}
+	else if(currentCat==="fogalmak"){
+		if(user.toLowerCase()===q.left.toLowerCase()){score+=8;correct=true}
+		else if(dist(user,q.left)<=2){}
+		else score-=4;
+		msg=correct?"✔ Helyes!":"✖ Nem sikerült.";
+	}
+	document.getElementById("score").innerText=score;
+	document.getElementById("result").innerText=msg;
+	inputIndex++;
+	setTimeout(showQuestion,600);
+};
+function finishGame(){
+	clearInterval(timer);
+	saveBests();
+	document.getElementById("summary").classList.remove("hidden");
+	document.getElementById("summary").innerHTML =
+		`Kész!<br>Idő: <b>${seconds} mp</b> | Pont: <b>${score}</b><br>
+		 Válassz új kategóriát a folytatáshoz!`;
+	document.querySelectorAll("#categoryBar button").forEach(btn=>btn.disabled=false);
+}
+document.querySelectorAll("#categoryBar button")
+	.forEach(btn=>btn.addEventListener("click",()=>loadCategory(btn.dataset.cat)));
+loadBests();
+</script>
+</body>
+</html>
+
+<!-- Made with AI. -->
